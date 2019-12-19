@@ -23,10 +23,10 @@
 <h1>ВХОД В СИСТЕМУ</h1>
 <div class="main">
     <h2>Введите данные для входа</h2>
-    <?php if (isset( $results['errorMessage'])) { ?>
-        <div class="errorMessage"><?php echo $results['errorMessage'] ?></div>
+    <?php if (isset($data['errorMessage'])) { ?>
+        <div class="errorMessage"><?php echo $data['errorMessage']; ?></div>
     <?php } ?>
-    <form action="login" method="post">
+    <form action="/user/login" method="post">
         <input type="text" class="name" name="login" placeholder="Логин" required="">
         <input type="password" class="password" name="password" placeholder="Пароль" required="">
         <input type="submit" value="ВОЙТИ">
