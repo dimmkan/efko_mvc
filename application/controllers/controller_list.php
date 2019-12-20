@@ -18,17 +18,57 @@ class Controller_list extends Controller
 
     function action_new()
     {
-        echo "NEW APP";
+        $this->view->generate('edit_view.php', 'template_view.php');
     }
 
     function action_logout()
     {
-        unset($_SESSION);
+        session_start();
+        unset($_COOKIE[session_name()]);
+        unset($_COOKIE[session_id()]);
+        session_unset();
+        session_destroy();
         header('Location: /');
+        exit;
     }
 
     function action_edit($appId)
     {
-        echo $appId;
+        $data = $this->model->getById($appId);
+        $this->view->generate('edit_view.php', 'template_view.php', $data);
+    }
+
+    function action_save()
+    {
+        session_start();
+        if(empty($_POST['id'])){
+            $_POST['id'] = null;
+            $_POST['userid'] = (int)$_SESSION['userData']['id'];
+            (int)$_POST['fixed'] = ($_POST['fixed'] == "on" ? 1 : 0);
+            $this->model->insert($_POST);
+            $data['statusMessage'] = "Новая заявка создана!";
+            $data['listApps'] = $this->model->getListApps();
+            $this->view->generate('list_view.php', 'template_view.php', $data);
+        }else{
+            (int)$_POST['fixed'] = ($_POST['fixed'] == "on" ? 1 : 0);
+            $this->model->update($_POST);
+            $data['statusMessage'] = "Заявка обновлена!";
+            $data['listApps'] = $this->model->getListApps();
+            $this->view->generate('list_view.php', 'template_view.php', $data);
+        }
+    }
+
+    function action_cancel()
+    {
+        header('Location: /list');
+    }
+
+    function action_delete($id)
+    {
+        session_start();
+        $this->model->delete($id);
+        $data['statusMessage'] = "Заявка удалена!";
+        $data['listApps'] = $this->model->getListApps();
+        $this->view->generate('list_view.php', 'template_view.php', $data);
     }
 }
