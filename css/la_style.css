@@ -98,6 +98,10 @@ text-decoration: underline;
 .tr .td:last-child {
 	border-right: none;
 }
+.td:hover{
+	background: #BCEBDD;
+	cursor: pointer;
+}
 
 .statusMessage, .errorMessage {
 	font-size: .8em;

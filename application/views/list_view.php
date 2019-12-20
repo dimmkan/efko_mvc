@@ -29,7 +29,7 @@
                             <?php }?>
                             <a  class="menu" href="/list/logout">Выйти</a> </p>
                     </td>
-                    <td align="center" width="92%">
+                    <td align="left" width="92%">
                         <table class="table">
                             <?php if (isset($data['errorMessage'] ) ) { ?>
                                 <tr class="tr"> <div class="errorMessage"><?php echo $data['errorMessage'] ?></div> </tr>
@@ -44,6 +44,7 @@
                                 <th class="th">Конец отпуска</th>
                                 <th class="th">Описание</th>
                                 <th class="th">Согласовано</th>
+                                <th class="th"></th>
                             </tr>
                             <?php foreach ($data['listApps'] as $leaveApp ) { ?>
                                 <tr class="tr" <?php if($leaveApp['userid'] == $_SESSION['userData']['id'] || $_SESSION['userData']['rules'] == "1"){
@@ -55,6 +56,7 @@
                                     <td class="td"><?= date('j M Y', strtotime($leaveApp['dateend']));?></td>
                                     <td class="td"><?= ($leaveApp['descr']);?></td>
                                     <td class="td"><?= ((int)$leaveApp['fixed']) ? "&#10004" : "&#10008";?></td>
+                                    <td class="td"><a href="/list/edit/<?= $leaveApp['id'] ?>">Изменить</a></td>
                                 </tr>
                             <?php } ?>
                         </table>
