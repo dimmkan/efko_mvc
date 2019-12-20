@@ -29,18 +29,26 @@ class Route
         $model_path = "application/models/".$model_file;
         if(file_exists($model_path))
         {
-            include "application/models/".$model_file;
+            try{
+                include "application/models/".$model_file;
+            }catch (Exception $e){
+                Route::ErrorPage404();
+            }
         }
 
         $controller_file = strtolower($controller_name).'.php';
         $controller_path = "application/controllers/".$controller_file;
         if(file_exists($controller_path))
         {
-            include "application/controllers/".$controller_file;
+            try{
+                include "application/controllers/".$controller_file;
+            }catch (Exception $e){
+                Route::ErrorPage404();
+            }
+
         }
         else
         {
-
             Route::ErrorPage404();
         }
 
