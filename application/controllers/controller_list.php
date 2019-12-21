@@ -12,8 +12,16 @@ class Controller_list extends Controller
     function action_index()
     {
         session_start();
-        $data['listApps'] = $this->model->getListApps();
-        $this->view->generate("list_view.php", "template_view.php", $data);
+        if(isset($_SESSION['userData'])){
+            $data['listApps'] = $this->model->getListApps();
+            if(isset($_SESSION['statusMessage'])){
+                $data['statusMessage'] = $_SESSION['statusMessage'];
+            }
+            $this->view->generate("list_view.php", "template_view.php", $data);
+        }else{
+            header('Location: /');
+        }
+
     }
 
     function action_new()
@@ -46,15 +54,13 @@ class Controller_list extends Controller
             $_POST['userid'] = (int)$_SESSION['userData']['id'];
             (int)$_POST['fixed'] = ($_POST['fixed'] == "on" ? 1 : 0);
             $this->model->insert($_POST);
-            $data['statusMessage'] = "Новая заявка создана!";
-            $data['listApps'] = $this->model->getListApps();
-            $this->view->generate('list_view.php', 'template_view.php', $data);
+            $_SESSION['statusMessage'] = "Новая заявка создана!";
+            header('Location: /list');
         }else{
             (int)$_POST['fixed'] = ($_POST['fixed'] == "on" ? 1 : 0);
             $this->model->update($_POST);
-            $data['statusMessage'] = "Заявка обновлена!";
-            $data['listApps'] = $this->model->getListApps();
-            $this->view->generate('list_view.php', 'template_view.php', $data);
+            $_SESSION['statusMessage'] = "Заявка обновлена!";
+            header('Location: /list');
         }
     }
 
@@ -67,8 +73,7 @@ class Controller_list extends Controller
     {
         session_start();
         $this->model->delete($id);
-        $data['statusMessage'] = "Заявка удалена!";
-        $data['listApps'] = $this->model->getListApps();
-        $this->view->generate('list_view.php', 'template_view.php', $data);
+        $_SESSION['statusMessage'] = "Заявка удалена!";
+        header('Location: /list');
     }
 }
